@@ -15,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+
 @Service
 public class UsuarioService {
 
@@ -23,24 +24,11 @@ public class UsuarioService {
 
 	public Optional<Usuario> cadastrarUsuario(Usuario usuario) {
 		
-		
-		/**
-		 * Lanço uma Exception do tipo Response Status Bad Request
-		 */
 		if(usuarioRepository.findByUsuario(usuario.getUsuario()).isPresent())
 			throw new ResponseStatusException(
 				HttpStatus.BAD_REQUEST, "Usuário já existe!", null);
 		
-		/**
-		 * Calcular a idade (em anos) através do método between, da Classe Period
-		 */
-		
 		 int idade = Period.between(usuario.getDataNascimento(), LocalDate.now()).getYears();
-		
-		/**
-		 * Verifico se a iade é menor de 18. Caso positivo,
-		 * Lanço uma Exception do tipo Response Status Bad Request 
-		 */
 		
 		 if(idade < 18)
 			throw new ResponseStatusException(
@@ -59,11 +47,6 @@ public class UsuarioService {
 	public Optional<Usuario> atualizarUsuario(Usuario usuario){
 		
 		if(usuarioRepository.findById(usuario.getId()).isPresent()) {
-
-			/**
-			 * Mesma verificação do método cadastrarUsuario
-			 */
-
 			int idade = Period.between(usuario.getDataNascimento(), LocalDate.now()).getYears();
 			
 			if(idade < 18)
@@ -77,15 +60,10 @@ public class UsuarioService {
 			
 			return Optional.of(usuarioRepository.save(usuario));
 		
-		}else {
-			
-			/**
-			 * Lanço uma Exception do tipo Response Status Not Found
-			 */
-
+		}
+		else {
 			throw new ResponseStatusException(
 					HttpStatus.NOT_FOUND, "Usuário não encontrado!", null);
-			
 		}
 		
 	}
@@ -110,10 +88,6 @@ public class UsuarioService {
 
 			}
 		}
-		
-		/**
-		 * Lanço uma Exception do tipo Response Status Unauthorized
-		*/
 		
 		throw new ResponseStatusException(
 				HttpStatus.UNAUTHORIZED, "Usuário ou senha inválidos!", null);
